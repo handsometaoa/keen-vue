@@ -34,9 +34,11 @@ const actions = {
     const { username, password, rememberMe } = userInfo
     return new Promise((resolve, reject) => {
       login({
-        username: username.trim(),
-        password: password,
-        rememberMe: rememberMe
+        data: {
+          username: username.trim(),
+          password: password,
+          rememberMe: rememberMe
+        }
       }).then(res => {
         if (res.code === 200) {
           const { tokenValue } = res.data
