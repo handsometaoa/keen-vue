@@ -8,6 +8,14 @@ export const login = data => {
   })
 }
 
+export const getCaptcha = data => {
+  return $instance({
+    url: '/api/auth/getCaptcha',
+    method: 'get',
+    data
+  })
+}
+
 export const fetchUserMenus = () => {
   return $instance({
     url: '/api/system/user/menu',
