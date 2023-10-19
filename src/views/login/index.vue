@@ -90,6 +90,20 @@
                   </div>
 
                   <div class="d-flex flex-stack flex-wrap gap-3 fs-base fw-semibold mb-10">
+                    <el-input
+                      v-model="loginForm.captchaCode"
+                      style="width: 55%; height: 40px"
+                      placeholder="验证码"
+                    />
+                    <img
+                      style="width: 40%; height: 60px"
+                      :src="'data:image/png;base64,' + loginForm.captchaImg"
+                      class="p-4"
+                      @click="refreshCaptcha"
+                    >
+                  </div>
+
+                  <div class="d-flex flex-stack flex-wrap gap-3 fs-base fw-semibold mb-10">
                     <el-checkbox v-model="loginForm.rememberMe">Remember me</el-checkbox>
                     <div />
 
@@ -159,6 +173,8 @@
   </div>
 </template>
 <script>
+import { getCaptcha } from '@/api/system/user'
+
 export default {
   name: 'KeenLogin',
   data() {
@@ -166,7 +182,10 @@ export default {
       loginForm: {
         username: '',
         password: '',
-        rememberMe: false
+        rememberMe: false,
+        captchaSign: '',
+        captchaCode: '',
+        captchaImg: ''
       },
       loadingBtn: false
     }
@@ -183,10 +202,34 @@ export default {
       immediate: true
     }
   },
+  created() {
+    this.refreshCaptcha()
+    localStorage.clear() // 登录前清除token
+  },
+  mounted() {
+    this.startTimer()
+  },
+
   methods: {
+    startTimer() {
+    // 每 30 秒执行一次
+      this.timerId = setInterval(() => {
+        this.refreshCaptcha()
+      }, 30000)
+    },
+    refreshCaptcha() {
+      getCaptcha().then(res => {
+        this.loginForm.captchaImg = res.data.captchaImg
+        this.loginForm.captchaSign = res.data.captchaSign
+      })
+    },
     handleLogin() {
       if (!this.loginForm.username || !this.loginForm.password) {
         this.$Message.warning('账号或密码不能为空')
+        return
+      }
+      if (this.loginForm.captchaCode === '') {
+        this.$Message.warning('验证码不能为空')
         return
       }
       this.loadingBtn = true

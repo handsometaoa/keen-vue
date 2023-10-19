@@ -31,13 +31,15 @@ const mutations = {
 
 const actions = {
   login({ commit }, userInfo) {
-    const { username, password, rememberMe } = userInfo
+    const { username, password, rememberMe, captchaSign, captchaCode } = userInfo
     return new Promise((resolve, reject) => {
       login({
         data: {
           username: username.trim(),
           password: password,
-          rememberMe: rememberMe
+          rememberMe: rememberMe,
+          captchaSign: captchaSign,
+          captchaCode: captchaCode
         }
       }).then(res => {
         if (res.code === 200) {
