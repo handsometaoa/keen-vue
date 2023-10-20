@@ -2,6 +2,16 @@
   <div
     class="d-flex flex-column flex-root"
   >
+    <el-dialog
+      title="注册账号"
+      :visible.sync="registerTableVisible"
+      center
+      :append-to-body="true"
+      :lock-scroll="true"
+      width="30%"
+    >
+      <UserRegister />
+    </el-dialog>
     <div class="d-flex flex-column flex-lg-row flex-column-fluid">
       <div class="d-flex flex-lg-row-fluid w-lg-55 bgi-size-cover bgi-position-center login-bg">
         <div class="d-flex flex-column flex-stack p-6 p-lg-10 w-100">
@@ -38,14 +48,15 @@
                 <span
                   class="text-gray-400 fw-bold fs-5 me-2"
                 >
-                  Not a Member yet?
+                  没有账户?
                 </span>
 
                 <a
                   href="#"
                   class="link-primary fw-bold fs-5"
+                  @click="showRegisterTable()"
                 >
-                  Sign Up
+                  点击注册
                 </a>
               </div>
 
@@ -174,9 +185,13 @@
 </template>
 <script>
 import { getCaptcha } from '@/api/system/user'
+import UserRegister from './components/UserRegister.vue'
 
 export default {
   name: 'KeenLogin',
+  components: {
+    UserRegister
+  },
   data() {
     return {
       loginForm: {
@@ -187,7 +202,8 @@ export default {
         captchaCode: '',
         captchaImg: ''
       },
-      loadingBtn: false
+      loadingBtn: false,
+      registerTableVisible: false
     }
   },
   watch: {
@@ -211,6 +227,9 @@ export default {
   },
 
   methods: {
+    showRegisterTable() {
+      this.registerTableVisible = true
+    },
     startTimer() {
     // 每 30 秒执行一次
       this.timerId = setInterval(() => {
@@ -257,6 +276,9 @@ export default {
   <style>
   .login-bg {
       background-image: url('https://cdn.pixabay.com/photo/2023/04/08/23/32/nature-7910337_960_720.jpg');
+  }
+  .el-dialog .el-dialog__body{
+    border-radius: 0% 0% 3% 3%;
   }
   </style>
 
