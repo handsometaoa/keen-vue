@@ -57,6 +57,7 @@
 </template>
 
 <script>
+
 export default {
   name: 'UserRegister', // 这个LoginName最好和引入的vue的LoginName相同
   data() {
@@ -81,6 +82,16 @@ export default {
         console.log(this.registerForm.password)
         return
       }
+
+      this.$store.dispatch('user/register', this.registerForm).then(() => {
+        this.redirect = '/user'
+        this.$router.push({
+          path: this.redirect || '/',
+          query: this.otherQuery
+        })
+      }).finally(() => {
+        this.loadingBtn = false
+      })
     }
   }
 }

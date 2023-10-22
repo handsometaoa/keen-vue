@@ -16,6 +16,14 @@ export const getCaptcha = data => {
   })
 }
 
+export const register = data => {
+  return $instance({
+    url: '/api/auth/register',
+    method: 'post',
+    data
+  })
+}
+
 export const fetchUserMenus = () => {
   return $instance({
     url: '/api/system/user/menu',
